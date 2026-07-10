@@ -198,9 +198,12 @@ Supports all major languages available through Google Translate API.
 # 📂 Project Structure
 
 ```bash
-SmartSpeakTranslator/
+Voice Recognition and Translation/
 │
-├── index.html
+├── codes
+   ├── index.html
+   ├── style.css
+   ├── script.js
 ├── README.md
 ```
 
@@ -229,7 +232,7 @@ SmartSpeakTranslator/
 [GitHub Profile](https://github.com/pravallika-216)
 
 ## LinkedIn
-[LinkedIn Profile]  https://www.linkedin.com/in/padala-pravallika-b21833375?utm_source=share_via&utm_content=profile&utm_medium=member_android
+[LinkedIn Profile](https://www.linkedin.com/in/padala-pravallika-b21833375?utm_source=share_via&utm_content=profile&utm_medium=member_android)
 
 ---
 
