@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title> SmartSpeakTranslator(SST) </title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#0f172a,#111827,#1e293b);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+color:white;
+transition:0.4s;
+}
+
+body.light{
+background:linear-gradient(135deg,#dbeafe,#f8fafc,#e0f2fe);
+color:black;
+}
+
+.container{
+width:100%;
+max-width:950px;
+backdrop-filter:blur(18px);
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.15);
+padding:25px;
+border-radius:25px;
+box-shadow:0 0 40px rgba(0,0,0,0.4);
+}
+
+body.light .container{
+background:rgba(255,255,255,0.7);
+}
+
+.title{
+text-align:center;
+font-size:34px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.subtitle{
+text-align:center;
+opacity:0.8;
+margin-bottom:25px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+@media(max-width:768px){
+.grid{
+grid-template-columns:1fr;
+}
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+padding:20px;
+border-radius:20px;
+}
+
+body.light .card{
+background:rgba(255,255,255,0.6);
+}
+
+label{
+display:block;
+margin-bottom:8px;
+font-weight:600;
+}
+
+select,textarea,input[type=range]{
+width:100%;
+padding:12px;
+border:none;
+outline:none;
+border-radius:12px;
+margin-bottom:15px;
+font-size:15px;
+}
+
+textarea{
+resize:none;
+height:140px;
+}
+
+.buttons{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-top:10px;
+}
+
+button{
+border:none;
+padding:12px 18px;
+border-radius:12px;
+cursor:pointer;
+font-size:15px;
+font-weight:600;
+transition:0.3s;
+background:#2563eb;
+color:white;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+.listen{
+background:#dc2626;
+}
+
+.translate{
+background:#16a34a;
+}
+
+.stop{
+background:#f59e0b;
+}
+
+.clear{
+background:#6b7280;
+}
+
+.dark{
+background:#7c3aed;
+}
+
+.download{
+background:#0ea5e9;
+}
+
+.swap{
+background:#ec4899;
+}
+
+.mic-animation{
+display:none;
+justify-content:center;
+align-items:center;
+gap:8px;
+margin-top:15px;
+}
+
+.bar{
+width:6px;
+height:25px;
+background:#22c55e;
+border-radius:10px;
+animation:wave 1s infinite ease-in-out;
+}
+
+.bar:nth-child(2){
+animation-delay:0.2s;
+}
+
+.bar:nth-child(3){
+animation-delay:0.4s;
+}
+
+.bar:nth-child(4){
+animation-delay:0.6s;
+}
+
+@keyframes wave{
+0%,100%{
+height:15px;
+}
+50%{
+height:40px;
+}
+}
+
+.history{
+margin-top:20px;
+max-height:220px;
+overflow-y:auto;
+padding-right:5px;
+}
+
+.history-item{
+background:rgba(255,255,255,0.08);
+padding:12px;
+border-radius:12px;
+margin-bottom:10px;
+font-size:14px;
+}
+
+body.light .history-item{
+background:rgba(255,255,255,0.7);
+}
+
+.range-box{
+margin-top:10px;
+}
+
+.footer{
+text-align:center;
+margin-top:20px;
+opacity:0.7;
+font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="title">🌐 AI Voice Translator</div>
+<div class="subtitle">Advanced Multilingual Voice Recognition & Translation App</div>
+
+<div class="grid">
+
+<div class="card">
+
+<label>🎤 Input Language</label>
+
+<select id="inputLang">
+<option value="auto">Auto Detect</option>
+<option value="en-US">English</option>
+<option value="te-IN">Telugu</option>
+<option value="hi-IN">Hindi</option>
+<option value="ta-IN">Tamil</option>
+<option value="kn-IN">Kannada</option>
+<option value="ml-IN">Malayalam</option>
+<option value="bn-IN">Bengali</option>
+<option value="mr-IN">Marathi</option>
+<option value="gu-IN">Gujarati</option>
+<option value="pa-IN">Punjabi</option>
+<option value="ur-IN">Urdu</option>
+<option value="fr-FR">French</option>
+<option value="de-DE">German</option>
+<option value="ja-JP">Japanese</option>
+<option value="ko-KR">Korean</option>
+<option value="es-ES">Spanish</option>
+</select>
+
+<textarea id="speechOutput" placeholder="Your speech appears here..."></textarea>
+
+<div class="buttons">
+<button class="listen" onclick="startListening()">🎤 Start</button>
+<button class="stop" onclick="stopSpeaking()">⏹ Stop Voice</button>
+<button class="clear" onclick="clearAll()">🧹 Clear</button>
+</div>
+
+<div class="mic-animation" id="micAnimation">
+<div class="bar"></div>
+<div class="bar"></div>
+<div class="bar"></div>
+<div class="bar"></div>
+</div>
+
+</div>
+
+<div class="card">
+
+<label>🌍 Translate To</label>
+
+<select id="targetLang">
+<option value="en">English</option>
+<option value="te">Telugu</option>
+<option value="hi">Hindi</option>
+<option value="ta">Tamil</option>
+<option value="kn">Kannada</option>
+<option value="ml">Malayalam</option>
+<option value="bn">Bengali</option>
+<option value="mr">Marathi</option>
+<option value="gu">Gujarati</option>
+<option value="pa">Punjabi</option>
+<option value="ur">Urdu</option>
+<option value="fr">French</option>
+<option value="de">German</option>
+<option value="ja">Japanese</option>
+<option value="ko">Korean</option>
+<option value="es">Spanish</option>
+</select>
+
+<textarea id="translatedText" placeholder="Translated text appears here..."></textarea>
+
+<div class="buttons">
+<button class="translate" onclick="translateText()">🌍 Translate</button>
+<button class="swap" onclick="swapLanguages()">🔄 Swap</button>
+<button onclick="copyText()">📋 Copy</button>
+<button class="download" onclick="downloadText()">📥 Download</button>
+<button class="dark" onclick="toggleTheme()">🌙 Theme</button>
+</div>
+
+<div class="range-box">
+<label>🔊 Voice Speed</label>
+<input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
+
+<label>🎚 Voice Pitch</label>
+<input type="range" id="pitch" min="0" max="2" step="0.1" value="1">
+</div>
+
+</div>
+
+</div>
+
+<div class="card history">
+<h3>📝 Translation History</h3>
+<div id="history"></div>
+</div>
+
+<div class="footer">
+Made with ❤️ using HTML, CSS & JavaScript
+</div>
+
+</div>
+
+<script>
+
+let recognition;
+let speechText = "";
+
+const speechOutput = document.getElementById("speechOutput");
+const translatedText = document.getElementById("translatedText");
+
+const languageMap = {
+en:"en-US",
+te:"te-IN",
+hi:"hi-IN",
+ta:"ta-IN",
+kn:"kn-IN",
+ml:"ml-IN",
+bn:"bn-IN",
+mr:"mr-IN",
+gu:"gu-IN",
+pa:"pa-IN",
+ur:"ur-IN",
+fr:"fr-FR",
+de:"de-DE",
+ja:"ja-JP",
+ko:"ko-KR",
+es:"es-ES"
+};
+
+function startListening(){
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if(!SpeechRecognition){
+alert("Speech Recognition not supported in this browser.");
+return;
+}
+
+recognition = new SpeechRecognition();
+
+const inputLang = document.getElementById("inputLang").value;
+
+recognition.lang = inputLang === "auto" ? "en-US" : inputLang;
+
+recognition.continuous = false;
+recognition.interimResults = false;
+
+document.getElementById("micAnimation").style.display = "flex";
+
+recognition.start();
+
+recognition.onresult = (event)=>{
+speechText = event.results[0][0].transcript;
+speechOutput.value = speechText;
+
+handleVoiceCommands(speechText);
+
+document.getElementById("micAnimation").style.display = "none";
+};
+
+recognition.onerror = (event)=>{
+alert("Error : " + event.error);
+document.getElementById("micAnimation").style.display = "none";
+};
+
+recognition.onend = ()=>{
+document.getElementById("micAnimation").style.display = "none";
+};
+
+}
+
+async function translateText(){
+
+if(!speechOutput.value.trim()){
+alert("Please speak or type something.");
+return;
+}
+
+const targetLang = document.getElementById("targetLang").value;
+
+const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(speechOutput.value)}`;
+
+try{
+
+const response = await fetch(url);
+
+const data = await response.json();
+
+const translated = data[0].map(item=>item[0]).join("");
+
+translatedText.value = translated;
+
+speakTranslatedText(translated,targetLang);
+
+saveHistory(speechOutput.value,translated);
+
+}catch(error){
+
+alert("Translation failed.");
+
+}
+
+}
+
+function speakTranslatedText(text,lang){
+
+speechSynthesis.cancel();
+
+const utterance = new SpeechSynthesisUtterance(text);
+
+utterance.lang = languageMap[lang] || "en-US";
+
+utterance.rate = document.getElementById("speed").value;
+
+utterance.pitch = document.getElementById("pitch").value;
+
+speechSynthesis.speak(utterance);
+
+}
+
+function stopSpeaking(){
+speechSynthesis.cancel();
+}
+
+function copyText(){
+
+navigator.clipboard.writeText(translatedText.value);
+
+alert("Copied!");
+
+}
+
+function clearAll(){
+
+speechOutput.value = "";
+translatedText.value = "";
+
+}
+
+function toggleTheme(){
+
+document.body.classList.toggle("light");
+
+localStorage.setItem("theme",
+document.body.classList.contains("light") ? "light" : "dark"
+);
+
+}
+
+if(localStorage.getItem("theme")==="light"){
+document.body.classList.add("light");
+}
+
+function swapLanguages(){
+
+const input = document.getElementById("inputLang");
+const target = document.getElementById("targetLang");
+
+const temp = input.value;
+input.value = languageMap[target.value] || "en-US";
+
+const reverse = temp.split("-")[0];
+target.value = reverse;
+
+}
+
+function saveHistory(original,translated){
+
+const historyDiv = document.getElementById("history");
+
+const item = document.createElement("div");
+
+item.className = "history-item";
+
+item.innerHTML = `
+<b>Original:</b> ${original}<br>
+<b>Translated:</b> ${translated}
+`;
+
+historyDiv.prepend(item);
+
+}
+
+function downloadText(){
+
+const text = translatedText.value;
+
+const blob = new Blob([text],{type:"text/plain"});
+
+const a = document.createElement("a");
+
+a.href = URL.createObjectURL(blob);
+
+a.download = "translation.txt";
+
+a.click();
+
+}
+
+function handleVoiceCommands(command){
+
+const text = command.toLowerCase();
+
+if(text.includes("dark mode")){
+document.body.classList.add("light");
+}
+
+if(text.includes("clear text")){
+clearAll();
+}
+
+}
+
+</script>
+
+</body>
+</html>
