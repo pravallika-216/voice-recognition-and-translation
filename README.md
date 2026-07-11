@@ -16,6 +16,9 @@ Voice Bridge is an advanced browser-based AI voice translation application that 
 This project is fully frontend-based and works directly in the browser without requiring any backend server.
 
 ---
+# Live Demo
+https://voice-bridge-ten-ruby.vercel.app/
+---
 
 # 🚀 Live Features
 
