@@ -1,8 +1,8 @@
-# 🌐🎤 Voice Recognition and Translation(VRT)
+# 🌐🎤 Voice Bridge
 
 ## 🧠 AI-Powered Multilingual Voice Recognition & Translation Web App
 
-Voice recognition and Translation (VRT) is an advanced browser-based AI voice translation application that can:
+Voice Bridge is an advanced browser-based AI voice translation application that can:
 
 - 🎤 Recognize speech in multiple languages
 - 🌍 Detect and translate spoken text
@@ -247,6 +247,6 @@ Feel free to modify and improve the project.
 
 ---
 
-# ⭐ Voice Recognition and Translation(VRT)
+# ⭐ Voice Bridge
 
 ### “Speak Any Language. Understand Every Voice.”
