@@ -19,6 +19,7 @@ This project is fully frontend-based and works directly in the browser without r
 # Live Demo
 
 https://voice-bridge-ten-ruby.vercel.app/
+
 ---
 
 # 🚀 Live Features
